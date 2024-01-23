@@ -56,7 +56,7 @@ class SecondPage extends StatelessWidget {
                       builder: (context) => ThirdPage(buttonNumber: 1)),
                 );
               },
-              child: Text('Button 1'),
+              child: Text('Contact 1'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
@@ -67,7 +67,7 @@ class SecondPage extends StatelessWidget {
                       builder: (context) => ThirdPage(buttonNumber: 2)),
                 );
               },
-              child: Text('Button 2'),
+              child: Text('Contact 2'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
@@ -78,10 +78,63 @@ class SecondPage extends StatelessWidget {
                       builder: (context) => ThirdPage(buttonNumber: 3)),
                 );
               },
-              child: Text('Button 3'),
+              child: Text('Contact 3'),
             ),
-            // Repeat the pattern for buttons 4-8
-            // ...
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ThirdPage(buttonNumber: 4)),
+                );
+              },
+              child: Text('Contact 4'),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ThirdPage(buttonNumber: 5)),
+                );
+              },
+              child: Text('Contact 5'),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ThirdPage(buttonNumber: 6)),
+                );
+              },
+              child: Text('Contact 6'),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ThirdPage(buttonNumber: 7)),
+                );
+              },
+              child: Text('Contact 7'),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ThirdPage(buttonNumber: 8)),
+                );
+              },
+              child: Text('Contact 8'),
+            ),
           ],
         ),
       ),
