@@ -15,9 +15,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +44,14 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class SecondPage extends StatelessWidget {
+class SecondPage extends StatefulWidget {
   const SecondPage({super.key});
 
+  @override
+  _SecondPageState createState() => _SecondPageState();
+}
+
+class _SecondPageState extends State<SecondPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,16 +101,21 @@ class SecondPage extends StatelessWidget {
   }
 }
 
-class ThirdPage extends StatelessWidget {
+class ThirdPage extends StatefulWidget {
   final int buttonNumber;
 
   const ThirdPage({Key? key, required this.buttonNumber}) : super(key: key);
 
   @override
+  _ThirdPageState createState() => _ThirdPageState();
+}
+
+class _ThirdPageState extends State<ThirdPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contact $buttonNumber Page'),
+        title: Text('Contact ${widget.buttonNumber} Page'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -108,7 +123,7 @@ class ThirdPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Contact $buttonNumber Name'),
+            Text('Contact ${widget.buttonNumber} Name'),
             const SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
@@ -133,7 +148,7 @@ class ThirdPage extends StatelessWidget {
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
-                    //Upload Button Logic
+                    // Upload Button Logic
                   },
                   child: const Text('Upload'),
                 ),
@@ -146,9 +161,14 @@ class ThirdPage extends StatelessWidget {
   }
 }
 
-class NewContactPage extends StatelessWidget {
+class NewContactPage extends StatefulWidget {
   const NewContactPage({super.key});
 
+  @override
+  _NewContactPageState createState() => _NewContactPageState();
+}
+
+class _NewContactPageState extends State<NewContactPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
