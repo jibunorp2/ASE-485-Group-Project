@@ -75,7 +75,6 @@ class SecondPage extends StatelessWidget {
               },
               child: const Text('Contact 2'),
             ),
-            // ... (Other buttons for contacts)
           ],
         ),
       ),
@@ -109,12 +108,8 @@ class ThirdPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Name field at the top
             Text('Contact $buttonNumber Name'),
-
             const SizedBox(height: 20),
-
-            // Display area for what was said
             Container(
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
@@ -122,18 +117,12 @@ class ThirdPage extends StatelessWidget {
               ),
               padding: const EdgeInsets.all(8.0),
               child: const Text(
-                'Display what was said here',
+                'Messaging',
                 style: TextStyle(fontSize: 16.0),
               ),
             ),
-
             const SizedBox(height: 20),
-
-            // Text input box at the bottom
-
             const SizedBox(height: 20),
-
-            // Upload button beside the text input box
             Row(
               children: [
                 const Expanded(
@@ -144,7 +133,7 @@ class ThirdPage extends StatelessWidget {
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
-                    // Implement your upload logic here
+                    //Upload Button Logic
                   },
                   child: const Text('Upload'),
                 ),
