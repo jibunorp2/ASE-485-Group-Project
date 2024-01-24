@@ -111,6 +111,9 @@ class ThirdPage extends StatefulWidget {
 }
 
 class _ThirdPageState extends State<ThirdPage> {
+  List<String> messages = []; // List to store messages
+  TextEditingController messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,26 +134,49 @@ class _ThirdPageState extends State<ThirdPage> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'Messaging',
-                style: TextStyle(fontSize: 16.0),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return Text(messages[index]);
+                },
               ),
             ),
             const SizedBox(height: 20),
-            const SizedBox(height: 20),
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: TextField(
-                    decoration: InputDecoration(labelText: 'Text Box 2'),
+                    controller: messageController,
+                    decoration: InputDecoration(labelText: 'Type a message'),
                   ),
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
-                    // Upload Button Logic
+                    // Add the typed message to the list
+                    setState(() {
+                      messages.add(messageController.text);
+                      messageController.clear(); // Clear the input field
+                    });
                   },
-                  child: const Text('Upload'),
+                  child: const Text('Send'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // Upload file logic
+                    // You can implement the logic for file upload here
+                  },
+                  child: const Text('Upload File'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // Upload file logic
+                    // You can implement the logic for file upload here
+                  },
+                  child: const Text('Create Appointment'),
                 ),
               ],
             ),
