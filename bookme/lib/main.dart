@@ -45,13 +45,15 @@ class _HomePageState extends State<HomePage> {
 }
 
 class SecondPage extends StatefulWidget {
-  const SecondPage({super.key});
+  const SecondPage({Key? key}) : super(key: key);
 
   @override
   _SecondPageState createState() => _SecondPageState();
 }
 
 class _SecondPageState extends State<SecondPage> {
+  List<String> contacts = []; // List to store contacts
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,38 +66,78 @@ class _SecondPageState extends State<SecondPage> {
           children: [
             const Text('Contacts'),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ThirdPage(buttonNumber: 1)),
-                );
-              },
-              child: const Text('Contact 1'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ThirdPage(buttonNumber: 2)),
-                );
-              },
-              child: const Text('Contact 2'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: contacts.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      _navigateToThirdPage(index);
+                    },
+                    child: ListTile(
+                      title: Text(contacts[index]),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const NewContactPage()),
-          );
+          _showNewContactDialog(context);
         },
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  // Function to show a dialog for adding a new contact
+  Future<void> _showNewContactDialog(BuildContext context) async {
+    String newContact = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController newContactController = TextEditingController();
+
+        return AlertDialog(
+          title: const Text('Add New Contact'),
+          content: TextField(
+            controller: newContactController,
+            decoration: const InputDecoration(labelText: 'Contact Name'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, newContactController.text);
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+
+    // Add the new contact to the list if not null (user didn't cancel)
+    if (newContact != null && newContact.isNotEmpty) {
+      setState(() {
+        contacts.add(newContact);
+      });
+    }
+  }
+
+  // Function to navigate to the ThirdPage with the selected contact
+  void _navigateToThirdPage(int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ThirdPage(buttonNumber: index + 1),
       ),
     );
   }
@@ -111,6 +153,9 @@ class ThirdPage extends StatefulWidget {
 }
 
 class _ThirdPageState extends State<ThirdPage> {
+  List<String> messages = []; // List to store messages
+  TextEditingController messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,26 +176,55 @@ class _ThirdPageState extends State<ThirdPage> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               padding: const EdgeInsets.all(8.0),
-              child: const Text(
-                'Messaging',
-                style: TextStyle(fontSize: 16.0),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return Text(messages[index]);
+                },
               ),
             ),
             const SizedBox(height: 20),
-            const SizedBox(height: 20),
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: TextField(
-                    decoration: InputDecoration(labelText: 'Text Box 2'),
+                    controller: messageController,
+                    decoration: InputDecoration(labelText: 'Type a message'),
                   ),
                 ),
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
-                    // Upload Button Logic
+                    // Add the typed message to the list
+                    setState(() {
+                      messages.add(messageController.text);
+                      messageController.clear(); // Clear the input field
+                    });
                   },
-                  child: const Text('Upload'),
+                  child: const Text('Send'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // Upload file logic
+                    // You can implement the logic for file upload here
+                  },
+                  child: const Text('Upload File'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigate to the appointment creation page and pass the callback function
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AppointmentPage(onSave: addAppointmentDetails),
+                      ),
+                    );
+                  },
+                  child: const Text('Create Appointment'),
                 ),
               ],
             ),
@@ -158,6 +232,12 @@ class _ThirdPageState extends State<ThirdPage> {
         ),
       ),
     );
+  }
+
+  void addAppointmentDetails(String details) {
+    setState(() {
+      messages.add(details);
+    });
   }
 }
 
@@ -182,6 +262,78 @@ class _NewContactPageState extends State<NewContactPage> {
             Text('Add a New Contact'),
             SizedBox(height: 20),
             // Add form fields or UI for adding a new contact
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AppointmentPage extends StatefulWidget {
+  final Function(String) onSave;
+
+  AppointmentPage({required this.onSave});
+
+  @override
+  _AppointmentPageState createState() => _AppointmentPageState();
+}
+
+class _AppointmentPageState extends State<AppointmentPage> {
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
+  TextEditingController reasonController = TextEditingController();
+  TextEditingController detailsController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Create Appointment'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: dateController,
+              decoration: InputDecoration(labelText: 'Date'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: timeController,
+              decoration: InputDecoration(labelText: 'Time'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: typeController,
+              decoration: InputDecoration(labelText: 'Type'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: reasonController,
+              decoration: InputDecoration(labelText: 'Reason'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: detailsController,
+              decoration: InputDecoration(labelText: 'Details'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Call the callback function to save appointment details
+                String details =
+                    'Date: ${dateController.text}, Time: ${timeController.text}, Type: ${typeController.text}, Reason: ${reasonController.text}, Details: ${detailsController.text}';
+                widget.onSave(details);
+
+                // Close the current page
+                Navigator.pop(context);
+              },
+              child: Text('Save Appointment'),
+            ),
           ],
         ),
       ),
