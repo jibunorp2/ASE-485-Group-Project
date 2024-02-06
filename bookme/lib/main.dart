@@ -45,13 +45,15 @@ class _HomePageState extends State<HomePage> {
 }
 
 class SecondPage extends StatefulWidget {
-  const SecondPage({super.key});
+  const SecondPage({Key? key}) : super(key: key);
 
   @override
   _SecondPageState createState() => _SecondPageState();
 }
 
 class _SecondPageState extends State<SecondPage> {
+  List<String> contacts = []; // List to store contacts
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,38 +66,78 @@ class _SecondPageState extends State<SecondPage> {
           children: [
             const Text('Contacts'),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ThirdPage(buttonNumber: 1)),
-                );
-              },
-              child: const Text('Contact 1'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ThirdPage(buttonNumber: 2)),
-                );
-              },
-              child: const Text('Contact 2'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: contacts.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      _navigateToThirdPage(index);
+                    },
+                    child: ListTile(
+                      title: Text(contacts[index]),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const NewContactPage()),
-          );
+          _showNewContactDialog(context);
         },
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  // Function to show a dialog for adding a new contact
+  Future<void> _showNewContactDialog(BuildContext context) async {
+    String newContact = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController newContactController = TextEditingController();
+
+        return AlertDialog(
+          title: const Text('Add New Contact'),
+          content: TextField(
+            controller: newContactController,
+            decoration: const InputDecoration(labelText: 'Contact Name'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, newContactController.text);
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+
+    // Add the new contact to the list if not null (user didn't cancel)
+    if (newContact != null && newContact.isNotEmpty) {
+      setState(() {
+        contacts.add(newContact);
+      });
+    }
+  }
+
+  // Function to navigate to the ThirdPage with the selected contact
+  void _navigateToThirdPage(int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ThirdPage(buttonNumber: index + 1),
       ),
     );
   }
