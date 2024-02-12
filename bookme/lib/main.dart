@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,19 +12,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: HomePage(),
+      home: SignInPage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _SignInPageState createState() => _SignInPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +36,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SecondPage()),
+              MaterialPageRoute(builder: (context) => const ContactPage()),
             );
           },
           child: const Text('Log In'),
@@ -44,27 +46,27 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class SecondPage extends StatefulWidget {
-  const SecondPage({Key? key}) : super(key: key);
+class ContactPage extends StatefulWidget {
+  const ContactPage({Key? key}) : super(key: key);
 
   @override
-  _SecondPageState createState() => _SecondPageState();
+  _ContactPageState createState() => _ContactPageState();
 }
 
-class _SecondPageState extends State<SecondPage> {
+class _ContactPageState extends State<ContactPage> {
   List<String> contacts = []; // List to store contacts
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Contacts'),
+        title: const Text('Contacts Page'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Contacts'),
+            const Text('Contacts List'),
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
@@ -72,7 +74,7 @@ class _SecondPageState extends State<SecondPage> {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      _navigateToThirdPage(index);
+                      _navigateToMessagePage(index);
                     },
                     child: ListTile(
                       title: Text(contacts[index]),
@@ -125,34 +127,34 @@ class _SecondPageState extends State<SecondPage> {
     );
 
     // Add the new contact to the list if not null (user didn't cancel)
-    if (newContact != null && newContact.isNotEmpty) {
+    if (newContact.isNotEmpty) {
       setState(() {
         contacts.add(newContact);
       });
     }
   }
 
-  // Function to navigate to the ThirdPage with the selected contact
-  void _navigateToThirdPage(int index) {
+  // Function to navigate to the MessagePage with the selected contact
+  void _navigateToMessagePage(int index) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ThirdPage(buttonNumber: index + 1),
+        builder: (context) => MessagePage(buttonNumber: index + 1),
       ),
     );
   }
 }
 
-class ThirdPage extends StatefulWidget {
+class MessagePage extends StatefulWidget {
   final int buttonNumber;
 
-  const ThirdPage({Key? key, required this.buttonNumber}) : super(key: key);
+  const MessagePage({Key? key, required this.buttonNumber}) : super(key: key);
 
   @override
-  _ThirdPageState createState() => _ThirdPageState();
+  _MessagePageState createState() => _MessagePageState();
 }
 
-class _ThirdPageState extends State<ThirdPage> {
+class _MessagePageState extends State<MessagePage> {
   List<String> messages = []; // List to store messages
   TextEditingController messageController = TextEditingController();
 
@@ -190,7 +192,8 @@ class _ThirdPageState extends State<ThirdPage> {
                 Expanded(
                   child: TextField(
                     controller: messageController,
-                    decoration: InputDecoration(labelText: 'Type a message'),
+                    decoration:
+                        const InputDecoration(labelText: 'Type a message'),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -272,7 +275,7 @@ class _NewContactPageState extends State<NewContactPage> {
 class AppointmentPage extends StatefulWidget {
   final Function(String) onSave;
 
-  AppointmentPage({required this.onSave});
+  const AppointmentPage({super.key, required this.onSave});
 
   @override
   _AppointmentPageState createState() => _AppointmentPageState();
@@ -289,7 +292,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Appointment'),
+        title: const Text('Create Appointment'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -299,27 +302,27 @@ class _AppointmentPageState extends State<AppointmentPage> {
           children: [
             TextField(
               controller: dateController,
-              decoration: InputDecoration(labelText: 'Date'),
+              decoration: const InputDecoration(labelText: 'Date'),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: timeController,
-              decoration: InputDecoration(labelText: 'Time'),
+              decoration: const InputDecoration(labelText: 'Time'),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: typeController,
-              decoration: InputDecoration(labelText: 'Type'),
+              decoration: const InputDecoration(labelText: 'Type'),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: reasonController,
-              decoration: InputDecoration(labelText: 'Reason'),
+              decoration: const InputDecoration(labelText: 'Reason'),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: detailsController,
-              decoration: InputDecoration(labelText: 'Details'),
+              decoration: const InputDecoration(labelText: 'Details'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -332,7 +335,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 // Close the current page
                 Navigator.pop(context);
               },
-              child: Text('Save Appointment'),
+              child: const Text('Save Appointment'),
             ),
           ],
         ),
