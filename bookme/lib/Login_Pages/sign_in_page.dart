@@ -47,6 +47,8 @@ class _SignInPageState extends State<SignInPage> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal, // Set background color
+                  foregroundColor: Colors.white, // Set text color to black
                   padding:
                       const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 ),
@@ -63,6 +65,8 @@ class _SignInPageState extends State<SignInPage> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal, // Set background color
+                  foregroundColor: Colors.white, // Set text color to black
                   padding:
                       const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 ),
