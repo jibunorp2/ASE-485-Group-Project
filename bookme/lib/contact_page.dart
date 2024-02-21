@@ -11,6 +11,7 @@ class ContactPage extends StatefulWidget {
   _ContactPageState createState() => _ContactPageState();
 }
 
+//On load this function should grab the current list of contacts and then build them out. Also needs to refresh when a new contact is added
 class _ContactPageState extends State<ContactPage> {
   List<String> contacts = []; // List to store contacts
 
@@ -54,6 +55,7 @@ class _ContactPageState extends State<ContactPage> {
   }
 
   // Function to show a dialog for adding a new contact
+  //Need to add this directly to database somehow, then refresh page
   Future<void> _showNewContactDialog(BuildContext context) async {
     String newContact = await showDialog(
       context: context,
