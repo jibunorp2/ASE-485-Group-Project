@@ -1,11 +1,15 @@
 // message_page.dart
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:bookme/Message_Pages/appointment_page.dart';
 import 'package:flutter/material.dart';
 
 class MessagePage extends StatefulWidget {
   final int buttonNumber;
+  final String contactName;
 
-  const MessagePage({Key? key, required this.buttonNumber}) : super(key: key);
+  const MessagePage(
+      {super.key, required this.buttonNumber, required this.contactName});
 
   @override
   _MessagePageState createState() => _MessagePageState();
@@ -19,7 +23,7 @@ class _MessagePageState extends State<MessagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contact ${widget.buttonNumber} Page'),
+        title: Text('${widget.contactName}\'s Page'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -27,7 +31,7 @@ class _MessagePageState extends State<MessagePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Contact ${widget.buttonNumber} Name'),
+            Text('Messages with ${widget.contactName}'),
             const SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
