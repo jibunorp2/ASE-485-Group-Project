@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'login_page.dart'; // Import your login page
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({super.key});
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -53,9 +53,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   child: TextField(
                     controller: _nameController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Name',
-                      contentPadding: const EdgeInsets.symmetric(
+                      contentPadding: EdgeInsets.symmetric(
                           vertical: 16.0,
                           horizontal: 16.0), // Adjust the padding as needed
                     ),
@@ -73,9 +73,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   child: TextField(
                     controller: _emailController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Email',
-                      contentPadding: const EdgeInsets.symmetric(
+                      contentPadding: EdgeInsets.symmetric(
                           vertical: 16.0,
                           horizontal: 16.0), // Adjust the padding as needed
                     ),
@@ -94,9 +94,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   child: TextField(
                     controller: _passwordController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Password',
-                      contentPadding: const EdgeInsets.symmetric(
+                      contentPadding: EdgeInsets.symmetric(
                           vertical: 16.0,
                           horizontal: 16.0), // Adjust the padding as needed
                     ),
@@ -104,11 +104,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 32),
+                //Register Button
                 ElevatedButton(
                   onPressed: () {
-                    if (_nameController.text.isNotEmpty &&
-                        _emailController.text.isNotEmpty &&
-                        _passwordController.text.isNotEmpty) {
+                    if (validateName(_nameController.text) &&
+                        validateEmail(_emailController.text) &&
+                        validatePass(_passwordController.text)) {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -132,4 +133,21 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+}
+
+//returns true if at least 1 number, 1 letter, and 7 characters
+bool validatePass(String password) {
+  return RegExp(r'^(?=.*[a-zA-Z])(?=.*\d).{7,}$').hasMatch(password);
+}
+
+//returns true if email follows x@y.z format
+bool validateEmail(String email) {
+  return RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+      .hasMatch(email);
+}
+
+//returns true if only lettters are found and is not empty
+bool validateName(String name) {
+  // Check if the name is not blank and contains only letters
+  return name.isNotEmpty && !RegExp(r'[^a-zA-Z]').hasMatch(name);
 }
