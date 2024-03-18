@@ -1,6 +1,7 @@
 // contact_page.dart
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:bookme/Contact_Pages.dart/settings_page.dart';
 import 'package:flutter/material.dart';
 import '../Message_Pages/message_page.dart';
 
@@ -12,7 +13,7 @@ class Contact {
 }
 
 class ContactPage extends StatefulWidget {
-  const ContactPage({Key? key}) : super(key: key);
+  const ContactPage({super.key});
 
   @override
   _ContactPageState createState() => _ContactPageState();
@@ -31,6 +32,19 @@ class _ContactPageState extends State<ContactPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Contacts Page'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsPage(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.settings),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -42,20 +56,24 @@ class _ContactPageState extends State<ContactPage> {
               child: ListView.builder(
                 itemCount: contacts.length,
                 itemBuilder: (context, index) {
-                  return InkWell(
+                  return ListTile(
+                    title: Center(
+                      child: Column(
+                        children: [
+                          Text(contacts[index].name),
+                          Text('Code: ${contacts[index].code}'),
+                        ],
+                      ),
+                    ),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _showDeleteConfirmationDialog(context, index);
+                      },
+                    ),
                     onTap: () {
                       _navigateToMessagePage(index);
                     },
-                    child: ListTile(
-                      title: Center(
-                        child: Column(
-                          children: [
-                            Text(contacts[index].name),
-                            Text('Code: ${contacts[index].code}'),
-                          ],
-                        ),
-                      ),
-                    ),
                   );
                 },
               ),
@@ -89,9 +107,9 @@ class _ContactPageState extends State<ContactPage> {
                 decoration: const InputDecoration(labelText: 'Contact Name'),
               ),
               const SizedBox(height: 16),
-              Text(
+              const Text(
                 'A 6-digit code will be generated for the new contact.',
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: Color.fromRGBO(158, 158, 158, 1)),
               ),
             ],
           ),
@@ -146,5 +164,41 @@ class _ContactPageState extends State<ContactPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _showDeleteConfirmationDialog(
+      BuildContext context, int index) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Contact'),
+          content:
+              Text('Are you sure you want to delete ${contacts[index].name}?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                _deleteContact(index);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Function to delete a contact from the list
+  void _deleteContact(int index) {
+    setState(() {
+      contacts.removeAt(index);
+    });
   }
 }
