@@ -1,0 +1,23 @@
+Requirements:
+* Landing Page
+* Login Page
+* Register Page
+* Contacts Page
+* Messaging Page
+* Basic Appointments
+* Configure Firebase
+* Configure Database for Users
+* Contact Storing
+* Configure Firebase Messaging
+* Add Front End CRUD
+Calendar Add
+Calendar Delete
+Appointment Add
+Appointment Delete
+* Create & Implement REST API
+* Basic Back End CRUD abilities
+Add Feature
+Delete Feature
+Update Feature
+Read Feature
+
