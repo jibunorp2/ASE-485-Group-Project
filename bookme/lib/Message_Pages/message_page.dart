@@ -1,15 +1,15 @@
-// message_page.dart
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:bookme/Message_Pages/appointment_page.dart';
 import 'package:flutter/material.dart';
+import 'appointment_page.dart';
 
 class MessagePage extends StatefulWidget {
   final int buttonNumber;
   final String contactName;
 
-  const MessagePage(
-      {super.key, required this.buttonNumber, required this.contactName});
+  const MessagePage({
+    Key? key,
+    required this.buttonNumber,
+    required this.contactName,
+  }) : super(key: key);
 
   @override
   _MessagePageState createState() => _MessagePageState();
@@ -17,6 +17,8 @@ class MessagePage extends StatefulWidget {
 
 class _MessagePageState extends State<MessagePage> {
   List<String> messages = []; // List to store messages
+  bool showAppointmentButtons =
+      false; // To control the visibility of appointment buttons
   TextEditingController messageController = TextEditingController();
 
   @override
@@ -28,69 +30,99 @@ class _MessagePageState extends State<MessagePage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Messages with ${widget.contactName}'),
-            const SizedBox(height: 20),
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return Text(messages[index]);
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: messageController,
-                    decoration:
-                        const InputDecoration(labelText: 'Type a message'),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      return Text(messages[index]);
+                    },
                   ),
                 ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add the typed message to the list
-                    setState(() {
-                      messages.add(messageController.text);
-                      messageController.clear(); // Clear the input field
-                    });
-                  },
-                  child: const Text('Send'),
+              ),
+            ),
+            if (showAppointmentButtons) // Show buttons conditionally
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Logic for approving the appointment
+                        setState(() {
+                          // Perform actions for approving the appointment
+                          messages.add("Appointment Approved");
+                          showAppointmentButtons =
+                              false; // Hide the buttons after action
+                        });
+                      },
+                      child: const Text('Approve'),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Logic for rejecting the appointment
+                        setState(() {
+                          // Perform actions for rejecting the appointment
+                          messages.add("Appointment Rejected");
+                          showAppointmentButtons =
+                              false; // Hide the buttons after action
+                        });
+                      },
+                      child: const Text('Reject'),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    // Upload file logic
-                    // You can implement the logic for file upload here
-                  },
-                  child: const Text('Upload File'),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to the appointment creation page and pass the callback function
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            AppointmentPage(onSave: addAppointmentDetails),
-                      ),
-                    );
-                  },
-                  child: const Text('Create Appointment'),
-                ),
-              ],
+              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: messageController,
+                      decoration:
+                          const InputDecoration(labelText: 'Type a message'),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Add the typed message to the list
+                      setState(() {
+                        messages.add(messageController.text);
+                        messageController.clear(); // Clear the input field
+                      });
+                    },
+                    child: const Text('Send'),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Navigate to the appointment creation page and pass the callback function
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AppointmentPage(onSave: addAppointmentDetails),
+                        ),
+                      );
+                    },
+                    child: const Text('Create Appointment'),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -101,6 +133,7 @@ class _MessagePageState extends State<MessagePage> {
   void addAppointmentDetails(String details) {
     setState(() {
       messages.add(details);
+      showAppointmentButtons = true; // Show the buttons after appointment added
     });
   }
 }

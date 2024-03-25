@@ -4,6 +4,7 @@
 import 'package:bookme/Contact_Pages.dart/settings_page.dart';
 import 'package:flutter/material.dart';
 import '../Message_Pages/message_page.dart';
+import 'calendar.dart'; // Import the calendar page
 
 class Contact {
   String name;
@@ -13,7 +14,7 @@ class Contact {
 }
 
 class ContactPage extends StatefulWidget {
-  const ContactPage({super.key});
+  const ContactPage({Key? key}) : super(key: key);
 
   @override
   _ContactPageState createState() => _ContactPageState();
@@ -43,6 +44,17 @@ class _ContactPageState extends State<ContactPage> {
               );
             },
             icon: const Icon(Icons.settings),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CalendarPage(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.calendar_today),
           ),
         ],
       ),
