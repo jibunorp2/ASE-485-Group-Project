@@ -1,27 +1,39 @@
 Requirements:
-1 Landing Page
-2 Login Page
-3 Register Page
-4 Contacts Page
-5 Messaging Page
-6 Basic Appointments
-7 Configure Firebase
-8 Configure Database for Users
-9 Contact Storing
-10 Configure Firebase Messaging
-11 Add Front End CRUD
-Calendar Add
-Calendar Delete
-Appointment Add
-Appointment Delete
-12 Create & Implement REST API
-13 Basic Back End CRUD abilities
-Add Feature
-Delete Feature
-Update Feature
-Read Feature
+Version 1
+1.Landing Page with Login or Register
+2.Login Page
+3.Register Page
+4.User Account
+5.Contact Page after Login
+6.Navigation Bar
+7.Settings Button
+8.List of Contacts
+9.Add Contact
+10.Remove Contacts
+11.Access Individual Messaging Page
+12.Message History
+12.1.Send and Receive Messages
+13.Send Custom Appointment Objects
+
+Version 2
+1. Appointment Creation
+1.1. Appointment Add
+1.2. Appointment Delete
+2. Backend CRUD
+2.1 Feature Add
+2.2 Feature Delete
+2.3 Fearure Update
+2.4 Feature Read
+3. Backend Implementation
+3.1 Implement Function Calling for frontend
+3.2 Registered Users Added to Database
+3.3 Contacts Added to Database
+3.4 Contacts Add to Contacts List
+4. Sign In Verification
 
 EPICS & USER STORIES:
+
+Version 1
 Epic: Account Creation
 
 User Story 1: Landing Page with Login or Register
@@ -90,3 +102,38 @@ individual messaging page with that person.
 Story - Message history, you can see the past messages
 Story - You can send and receive messages
 Story - You can send custom appointment objects
+
+Version 2
+Epic: Appointment Management
+
+1. Appointment Creation
+1.1 User Story - Appointment Add: As a user, I want to be able to add new appointments to my schedule, specifying the date, time, location, and any additional details, so that I can effectively organize my activities.
+
+1.2 User Story - Appointment Delete: As a user, I want the ability to delete appointments from my schedule when they are no longer needed or if there are any changes in plans, ensuring that my calendar remains up-to-date and accurate.
+
+Epic: Backend Development
+
+2. Backend CRUD
+2.1 User Story - Feature Add: As a developer, I need to implement functionality to add new features to the backend system, allowing for continuous enhancement and expansion of the application's capabilities.
+
+2.2 User Story - Feature Delete: As a developer, I need to create a mechanism for deleting unnecessary or deprecated features from the backend system, ensuring efficient maintenance and optimization of the application.
+
+2.3 User Story - Feature Update: As a developer, I need to establish a process for updating existing features in the backend system to improve functionality, fix bugs, or address user feedback, ensuring the application remains robust and reliable.
+
+2.4 User Story - Feature Read: As a developer, I need to implement functionality for reading and accessing features stored in the backend system, enabling seamless integration with the frontend and providing users with a smooth experience.
+
+Epic: Backend Implementation
+
+3. Backend Implementation
+3.1 User Story - Implement Function Calling for Frontend: As a backend developer, I need to establish a mechanism for frontend components to call backend functions seamlessly, enabling efficient communication and data exchange between the two layers of the application.
+
+3.2 User Story - Registered Users Added to Database: As a backend developer, I need to ensure that when users register for accounts, their information is securely stored in the database, allowing for authentication and personalized user experiences.
+
+3.3 User Story - Contacts Added to Database: As a backend developer, I need to implement functionality for adding contacts to the database when users interact with the application, facilitating communication and collaboration between users.
+
+3.4 User Story - Contacts Add to Contacts List: As a backend developer, I need to create a process for adding contacts to users' contact lists, ensuring that users can easily manage and communicate with their connections within the application.
+
+Epic: User Authentication
+
+4. Sign In Verification
+4.1 User Story - User Authentication: As a user, I want to undergo a verification process during sign-in to ensure that only authorized individuals can access the application, safeguarding the security of my account and personal information.
