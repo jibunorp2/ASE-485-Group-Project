@@ -16,9 +16,9 @@ Version 1
 13.Send Custom Appointment Objects
 
 Version 2
-1. Appointment Creation
-  1.1. Appointment Add
-  1.2. Appointment Delete
+1. Appointment
+  1.1. Appointment Acception / Rejection
+  1.2. Appointment Cross Checking Appointments
 2. Backend CRUD
   2.1 Feature Add
   2.2 Feature Delete
@@ -111,9 +111,9 @@ Version 2
 Epic: Appointment Management
 
 1. Appointment Creation
-1.1 User Story - Appointment Add: As a user, I want to be able to add new appointments to my schedule, specifying the date, time, location, and any additional details, so that I can effectively organize my activities.
+1.1 User Story - Appointment Acceptance/Rejection: As a user, I want to be able to choose to accept or reject new appointments to proposed to my schedule. So that I can accept the appointments I want in my schedule and reject those that I don't want.
 
-1.2 User Story - Appointment Delete: As a user, I want the ability to delete appointments from my schedule when they are no longer needed or if there are any changes in plans, ensuring that my calendar remains up-to-date and accurate.
+1.2 User Story - Appointment Cross Checking: As a user, I want the ability to cross check my appointments on my calendar so that I can make sure that appointments don't overlap and that there are no schedule conflicts.
 
 Epic: Backend Development
 
@@ -141,3 +141,10 @@ Epic: User Authentication
 
 4. Sign In Verification
 4.1 User Story - User Authentication: As a user, I want to undergo a verification process during sign-in to ensure that only authorized individuals can access the application, safeguarding the security of my account and personal information.
+
+Epic: Calendar Creation
+
+5. Calendar Creation
+5.1 User Story - Calendar: As a user, I would like a visual calendar so that I can see when my appointments are, and keep track of where and when I have things to do.
+
+5.2 User Story - Implement Backend Into Calendar: As a backend developer, I need to implement the calendar into the backend which aids the CRUD abilities of the application and ensures easy management of the rest of the application.
