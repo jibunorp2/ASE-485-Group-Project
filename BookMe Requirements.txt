@@ -16,23 +16,23 @@ Version 1
 13.Send Custom Appointment Objects
 
 Version 2
-1. Appointment
-  1.1. Appointment Acception / Rejection
-  1.2. Appointment Cross Checking Appointments
+(1)1. Appointment
+  (1)1.1. Appointment Acception / Rejection
+  (2)1.2. Appointment Cross Checking Appointments
 2. Backend CRUD
-  2.1 Feature Add
-  2.2 Feature Delete
-  2.3 Fearure Update
-  2.4 Feature Read
+  (3)2.1 Feature Add
+  (4)2.2 Feature Delete
+  (5)2.3 Feature Update
+  (6)2.4 Feature Read
 3. Backend Implementation
-  3.1 Implement Function Calling for frontend
-  3.2 Registered Users Added to Database
-  3.3 Contacts Added to Database
-  3.4 Contacts Add to Contacts List
-4. Sign In Verification
+  (7)3.1 Implement Function Calling for frontend
+  (8)3.2 Registered Users Added to Database
+  (9)3.3 Contacts Added to Database
+  (10)3.4 Contacts Add to Contacts List
+4.(11)Sign In Verification
 5. Calendar Creation
-  5.1 Create Calendar Skeleton
-  5.2 Implement Backend into Calendar
+  (12)5.1 Create Calendar Skeleton
+  (13)5.2 Implement Backend into Calendar
 
 
 EPICS & USER STORIES:
