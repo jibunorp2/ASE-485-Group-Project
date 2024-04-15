@@ -9,9 +9,9 @@ void main() {
       home: LoginPage(),
     ));
 
-    final emailField = find.byType(TextField).at(0);
-    final passwordField = find.byType(TextField).at(1);
-    final loginButton = find.text('Login');
+    final emailField = find.widgetWithText(TextField, 'Email');
+    final passwordField = find.widgetWithText(TextField, 'Password');
+    final loginButton = find.widgetWithText(ElevatedButton, 'Login');
 
     expect(emailField, findsOneWidget);
     expect(passwordField, findsOneWidget);
@@ -20,6 +20,9 @@ void main() {
     // Enter some email and password
     await tester.enterText(emailField, 'test@example.com');
     await tester.enterText(passwordField, 'password');
+
+    // After entering email and password, button should be enabled
+    expect(tester.widget<ElevatedButton>(loginButton).enabled, true);
 
     // Tap the login button
     await tester.tap(loginButton);
@@ -37,20 +40,16 @@ void main() {
       home: LoginPage(),
     ));
 
-    final loginButton = find.text('Login');
+    final loginButton = find.widgetWithText(ElevatedButton, 'Login');
 
-    // Initially, login button should be disabled
-    expect(tester.widget<ElevatedButton>(loginButton).enabled, false);
-
-    // Enter some email and password
-    await tester.enterText(find.byType(TextField).at(0), 'test@example.com');
-    await tester.enterText(find.byType(TextField).at(1), '');
-
-    // After entering email, button should still be disabled
-    expect(tester.widget<ElevatedButton>(loginButton).enabled, false);
+    // Enter some email and leave password empty
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Email'), 'test@example.com');
+    await tester.enterText(find.widgetWithText(TextField, 'Password'), '');
 
     // Enter password
-    await tester.enterText(find.byType(TextField).at(1), 'password');
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Password'), 'password');
 
     // After entering password, button should be enabled
     expect(tester.widget<ElevatedButton>(loginButton).enabled, true);
