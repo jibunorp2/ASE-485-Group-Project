@@ -132,4 +132,14 @@ class CRUD {
       await _db.collection('Appointment List').doc(doc.id).delete();
     }
   }
+
+  bool crossCheck(
+      Map<String, dynamic> appointment1, Map<String, dynamic> appointment2) {
+    DateTime date1 = (appointment1['date'] as Timestamp).toDate();
+    DateTime date2 = (appointment2['date'] as Timestamp).toDate();
+
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
 }
