@@ -1,9 +1,24 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class CRUD {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  CRUD() {
+    // Call the initialization function
+    _initializeFirebase();
+  }
+
+  Future<void> _initializeFirebase() async {
+    try {
+      // Ensure Firebase is initialized before proceeding
+      await Firebase.initializeApp();
+    } catch (e) {
+      print('Error initializing Firebase: $e');
+    }
+  }
 
   //signing up the user
   Future<bool> signUp(String name, String email, String password) async {
