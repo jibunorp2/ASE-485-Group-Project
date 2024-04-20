@@ -109,7 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     if (validateName(_nameController.text) &&
                         validateEmail(_emailController.text) &&
                         validatePass(_passwordController.text)) {
-                      bool success = await CRUD().signUp(
+                      bool success = await CRUD().registerUser(
                         _nameController.text,
                         _emailController.text,
                         _passwordController.text,

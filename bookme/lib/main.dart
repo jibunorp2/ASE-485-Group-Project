@@ -1,13 +1,16 @@
-// my_app.dart
+// main.dart
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Login_Pages/sign_in_page.dart';
-import 'crud.dart';
+import 'firebase_options.dart'; // Import the file with FirebaseOptions
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try {
-    await Firebase.initializeApp();
+    // Pass the FirebaseOptions to the initializeApp method
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   } catch (e) {
     print('Error initializing Firebase: $e');
   }
@@ -19,7 +22,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: SignInPage(),
     );
   }
