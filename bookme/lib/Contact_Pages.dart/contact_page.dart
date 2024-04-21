@@ -66,16 +66,30 @@ class _ContactPageState extends State<ContactPage> {
                 itemCount: contacts.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Center(child: Text(contacts[index]['name'])),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MessagePage(
-                                  buttonNumber: index + 1,
-                                  contactName: contacts[index]['name'])));
-                    },
-                  );
+                      title: Center(child: Text(contacts[index]['name'])),
+                      // Use Firebase UIDs directly from user document references where possible
+                      onTap: () async {
+                        try {
+                          // Use CRUD method to get user UID
+                          String userToAddUID = await _crud
+                              .getUserUIDByUserID(contacts[index]['user_ID']);
+                          String currentUserUID =
+                              _crud.currentUserUid; // Current user's UID
+
+                          // Get or create chat room
+                          String chatRoomId = await _crud.getOrCreateChatRoom(
+                              currentUserUID, userToAddUID);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MessagePage(
+                                      chatRoomId: chatRoomId,
+                                      contactName: contacts[index]['name'])));
+                        } catch (e) {
+                          // Handle exceptions, e.g., user not found
+                          print(e);
+                        }
+                      });
                 },
               ),
             ),

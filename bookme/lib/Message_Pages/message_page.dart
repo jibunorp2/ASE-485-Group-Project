@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'appointment_page.dart';
+import 'package:bookme/crud.dart'; // Ensure this import points to your actual CRUD class
+import 'appointment_page.dart'; // Make sure this import points to your actual AppointmentPage class
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessagePage extends StatefulWidget {
-  final int buttonNumber;
+  final String chatRoomId;
   final String contactName;
 
   const MessagePage({
     Key? key,
-    required this.buttonNumber,
+    required this.chatRoomId,
     required this.contactName,
   }) : super(key: key);
 
@@ -16,123 +18,132 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-  List<String> messages = []; // List to store messages
+  List<Map<String, dynamic>> messages = []; // List to store messages
+  TextEditingController messageController = TextEditingController();
+  final CRUD _crud = CRUD();
   bool showAppointmentButtons =
       false; // To control the visibility of appointment buttons
-  TextEditingController messageController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMessages();
+  }
+
+  void _loadMessages() async {
+    var fetchedMessages = await _crud.getMessageList(widget.chatRoomId);
+    setState(() {
+      messages = fetchedMessages;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.contactName}\'s Page'),
+        title: Text('${widget.contactName}\'s Chat Room'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      return Text(messages[index]);
-                    },
-                  ),
-                ),
-              ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(messages[index]['text']),
+                  subtitle: Text(
+                      'Sent at: ${messages[index]['timestamp'].toDate().toString()}'),
+                );
+              },
             ),
-            if (showAppointmentButtons) // Show buttons conditionally
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        // Logic for approving the appointment
-                        setState(() {
-                          // Perform actions for approving the appointment
-                          messages.add("Appointment Approved");
-                          showAppointmentButtons =
-                              false; // Hide the buttons after action
-                        });
-                      },
-                      child: const Text('Approve'),
-                    ),
-                    const SizedBox(width: 10),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Logic for rejecting the appointment
-                        setState(() {
-                          // Perform actions for rejecting the appointment
-                          messages.add("Appointment Rejected");
-                          showAppointmentButtons =
-                              false; // Hide the buttons after action
-                        });
-                      },
-                      child: const Text('Reject'),
-                    ),
-                  ],
-                ),
-              ),
+          ),
+          if (showAppointmentButtons) // Show buttons conditionally
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      controller: messageController,
-                      decoration:
-                          const InputDecoration(labelText: 'Type a message'),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
-                      // Add the typed message to the list
                       setState(() {
-                        messages.add(messageController.text);
-                        messageController.clear(); // Clear the input field
+                        messages.add({
+                          "text": "Appointment Approved",
+                          "timestamp": Timestamp.now()
+                        });
+                        showAppointmentButtons =
+                            false; // Hide the buttons after action
                       });
                     },
-                    child: const Text('Send'),
+                    child: const Text('Approve'),
                   ),
                   const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
-                      // Navigate to the appointment creation page and pass the callback function
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              AppointmentPage(onSave: addAppointmentDetails),
-                        ),
-                      );
+                      setState(() {
+                        messages.add({
+                          "text": "Appointment Rejected",
+                          "timestamp": Timestamp.now()
+                        });
+                        showAppointmentButtons =
+                            false; // Hide the buttons after action
+                      });
                     },
-                    child: const Text('Create Appointment'),
+                    child: const Text('Reject'),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: messageController,
+                    decoration: const InputDecoration(
+                      labelText: 'Type a message',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                ElevatedButton(
+                  onPressed: () => _sendMessage(),
+                  child: const Text('Send'),
+                ),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigate to the appointment creation page and pass the callback function
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AppointmentPage(onSave: addAppointmentDetails),
+                      ),
+                    );
+                  },
+                  child: const Text('Create Appointment'),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
+  void _sendMessage() async {
+    if (messageController.text.isNotEmpty) {
+      await _crud.sendMessage(widget.chatRoomId, messageController.text);
+      messageController.clear();
+      _loadMessages(); // Reload the message list to include the new message
+    }
+  }
+
   void addAppointmentDetails(String details) {
     setState(() {
-      messages.add(details);
+      messages.add({"text": details, "timestamp": Timestamp.now()});
       showAppointmentButtons = true; // Show the buttons after appointment added
     });
   }
