@@ -93,7 +93,8 @@ class _MessagePageState extends State<MessagePage> {
     _crud
         .updateAppointmentStatus(widget.chatRoomId, messageId, status)
         .then((_) {
-      _loadMessages(); // Refresh messages to reflect the updated status
+      // Refresh messages after updating appointment status
+      _loadMessages();
     }).catchError((error) {
       print("Failed to update appointment status: $error");
     });

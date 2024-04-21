@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({Key? key}) : super(key: key);
@@ -13,16 +14,37 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
-    dayStatus = generateDayStatusMap(31,
-        defaultValue: true); // Assuming 31 days in January
+    dayStatus = generateDayStatusMap(31); // All days are initially green
+    _fetchAppointments(); // Fetch appointments from Firestore
   }
 
-  Map<int, bool> generateDayStatusMap(int daysInMonth,
-      {bool defaultValue = true}) {
+  Future<void> _fetchAppointments() async {
+    // Query appointments for the current user from Firestore
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('appointments')
+          .where('userId',
+              isEqualTo: 'currentUserId') // Replace with actual user ID
+          .get();
+
+      // Update dayStatus based on appointments
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        Timestamp appointmentDate = doc['date'] as Timestamp;
+        int day = appointmentDate.toDate().day;
+        setState(() {
+          dayStatus[day] = true; // Mark the day as busy (red)
+        });
+      });
+    } catch (e) {
+      print('Error fetching appointments: $e');
+    }
+  }
+
+  Map<int, bool> generateDayStatusMap(int daysInMonth) {
     return Map<int, bool>.fromIterable(
       List.generate(daysInMonth, (index) => index + 1),
       key: (day) => day as int,
-      value: (_) => defaultValue,
+      value: (_) => false, // Default value set to false (green)
     );
   }
 
@@ -61,10 +83,7 @@ class _CalendarPageState extends State<CalendarPage> {
           int day = index + 1;
           return GestureDetector(
             onTap: () {
-              setState(() {
-                // Toggle busy status of the day
-                dayStatus[day] = !dayStatus[day]!;
-              });
+              _showDaySchedule(day);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -79,17 +98,6 @@ class _CalendarPageState extends State<CalendarPage> {
                       style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: () {
-                          _showDaySchedule(day);
-                        },
-                        customBorder: CircleBorder(),
                       ),
                     ),
                   ),

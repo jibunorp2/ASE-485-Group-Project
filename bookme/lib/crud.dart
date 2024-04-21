@@ -330,4 +330,31 @@ class CRUD {
       throw Exception("Failed to fetch participant UIDs");
     }
   }
+
+  Future<Map<String, dynamic>?> getContactListDataByName(String name) async {
+    try {
+      // Query Firestore to find user document by name
+      var userQuery = await _firestore
+          .collection('users')
+          .where('name', isEqualTo: name)
+          .limit(1)
+          .get();
+
+      if (userQuery.docs.isNotEmpty) {
+        // Return the data of the first matching document
+        var userDoc = userQuery.docs.first;
+        var userData = userDoc.data();
+        if (userData != null && userData is Map<String, dynamic>) {
+          // Remove the password field from the data
+          userData.remove('password');
+          return userData;
+        }
+      }
+      // Return null if no user with the given name is found
+      return null;
+    } catch (e) {
+      print("Error fetching contact list data by name: $e");
+      throw Exception("Failed to fetch contact list data by name");
+    }
+  }
 }
