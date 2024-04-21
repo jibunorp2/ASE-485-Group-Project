@@ -82,6 +82,45 @@ class CRUD {
     return [];
   }
 
+  Future<List<Map<String, dynamic>>> fetchAllContacts() async {
+    try {
+      List<Map<String, dynamic>> allContacts = [];
+
+      // Retrieve all contact lists from Firestore
+      QuerySnapshot contactListsSnapshot =
+          await _firestore.collection('contact_lists').get();
+
+      // Iterate through each contact list
+      for (QueryDocumentSnapshot contactListDoc in contactListsSnapshot.docs) {
+        // Check if data exists before accessing it
+        var data = contactListDoc.data();
+        if (data != null && data is Map<String, dynamic>) {
+          List<dynamic> userIDs =
+              List<dynamic>.from(data['users_in_list'] ?? []);
+
+          // Retrieve user details for each user in the contact list
+          for (String userID in userIDs) {
+            var userDoc = await _firestore
+                .collection('users')
+                .where('user_ID', isEqualTo: userID)
+                .get();
+            if (userDoc.docs.isNotEmpty) {
+              allContacts.add({
+                'name': userDoc.docs.first.data()['name'],
+                'user_ID': userID,
+              });
+            }
+          }
+        }
+      }
+
+      return allContacts;
+    } catch (e) {
+      print("Error fetching all contacts: $e");
+      return [];
+    }
+  }
+
   // Function to add a contact and create/update chat room
   Future<void> addContact(String userIDToAdd) async {
     User? currentUser = _auth.currentUser;

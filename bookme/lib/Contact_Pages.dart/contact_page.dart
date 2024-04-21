@@ -1,4 +1,3 @@
-// contact_page.dart
 import 'package:flutter/material.dart';
 import 'package:bookme/crud.dart'; // Ensure this import points to your CRUD class
 import 'settings_page.dart'; // Adjust path as needed
@@ -23,7 +22,7 @@ class _ContactPageState extends State<ContactPage> {
   }
 
   void _loadContacts() async {
-    var fetchedContacts = await _crud.fetchContacts();
+    var fetchedContacts = await _crud.fetchAllContacts();
     setState(() {
       contacts = fetchedContacts;
     });
@@ -132,6 +131,7 @@ class _ContactPageState extends State<ContactPage> {
 
     if (newContactID != null && newContactID.isNotEmpty) {
       await _crud.addContact(newContactID);
+      // Reload the contacts list
       _loadContacts(); // Refresh the contact list
     }
   }
