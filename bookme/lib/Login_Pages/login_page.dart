@@ -1,6 +1,6 @@
-// ignore_for_file: library_private_types_in_public_api
-
+// login_page.dart
 import 'package:flutter/material.dart';
+import 'package:bookme/crud.dart'; // Ensure this import points to your actual CRUD class file
 import '../Contact_Pages.dart/contact_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -27,10 +27,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [
-              Colors.blue,
-              Colors.teal
-            ], // Add your desired gradient colors
+            colors: [Colors.blue, Colors.teal],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -41,73 +38,70 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.width *
-                      0.3, // Adjust the width as needed
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.black), // Add border to TextField
-                    borderRadius: BorderRadius.circular(
-                        8.0), // Optional: Add border radius
-                  ),
-                  child: TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      border:
-                          InputBorder.none, // Hide TextField's default border
-                      contentPadding: EdgeInsets.all(16.0),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                ),
+                buildTextField(_emailController, 'Email', false),
                 const SizedBox(height: 16),
-                Container(
-                  width: MediaQuery.of(context).size.width *
-                      0.3, // Adjust the width as needed
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.black), // Add border to TextField
-                    borderRadius: BorderRadius.circular(
-                        8.0), // Optional: Add border radius
-                  ),
-                  child: TextField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      border:
-                          InputBorder.none, // Hide TextField's default border
-                      contentPadding: EdgeInsets.all(16.0),
-                    ),
-                    obscureText: true,
-                  ),
-                ),
+                buildTextField(_passwordController, 'Password', true),
                 const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_emailController.text.isNotEmpty &&
-                        _passwordController.text.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ContactPage(),
-                        ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal, // Set background color
-                    foregroundColor: Colors.white, // Set text color to black
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 20),
-                  ),
-                  child: const Text('Login', style: TextStyle(fontSize: 20)),
-                ),
+                loginButton(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildTextField(
+      TextEditingController controller, String label, bool obscureText) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.8,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.all(16.0),
+        ),
+        obscureText: obscureText,
+        keyboardType:
+            obscureText ? TextInputType.text : TextInputType.emailAddress,
+      ),
+    );
+  }
+
+  Widget loginButton() {
+    return ElevatedButton(
+      onPressed: () async {
+        if (_emailController.text.isNotEmpty &&
+            _passwordController.text.isNotEmpty) {
+          bool success = await CRUD().signIn(
+            _emailController.text,
+            _passwordController.text,
+          );
+          if (success) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ContactPage(),
+              ),
+            );
+          } else {
+            // Optionally show an error message if login fails
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Login failed. Please check your credentials.")));
+          }
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.teal,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      ),
+      child: const Text('Login', style: TextStyle(fontSize: 20)),
     );
   }
 }

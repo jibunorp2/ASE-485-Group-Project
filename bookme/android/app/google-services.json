@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "359451658384",
-    "project_id": "hw7thing",
-    "storage_bucket": "hw7thing.appspot.com"
+    "project_number": "388166436544",
+    "project_id": "crudstuff-a1d08",
+    "storage_bucket": "crudstuff-a1d08.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:359451658384:android:69ce39c0aba3f8e6293015",
+        "mobilesdk_app_id": "1:388166436544:android:fe94e3147a9bb94ee68f25",
         "android_client_info": {
           "package_name": "com.example.bookme"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAv899IJsGwWchHVgwgHEisIJFXhzs4cr8"
+          "current_key": "AIzaSyCBmYVuEDUv2c3lWB9mSRuU-RssPMgL-ps"
         }
       ],
       "services": {
@@ -26,34 +26,15 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:359451658384:android:7408acafe9a6a1bd293015",
+        "mobilesdk_app_id": "1:388166436544:android:d7e91260cefab03ee68f25",
         "android_client_info": {
-          "package_name": "com.example.firebase_login"
+          "package_name": "com.example.crudtesting"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAv899IJsGwWchHVgwgHEisIJFXhzs4cr8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:359451658384:android:2539c3f02b2b7ec8293015",
-        "android_client_info": {
-          "package_name": "com.example.pomodoro"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAv899IJsGwWchHVgwgHEisIJFXhzs4cr8"
+          "current_key": "AIzaSyCBmYVuEDUv2c3lWB9mSRuU-RssPMgL-ps"
         }
       ],
       "services": {

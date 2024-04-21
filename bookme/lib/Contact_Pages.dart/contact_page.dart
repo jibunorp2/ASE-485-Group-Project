@@ -1,17 +1,8 @@
-// contact_page.dart
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:bookme/Contact_Pages.dart/settings_page.dart';
 import 'package:flutter/material.dart';
-import '../Message_Pages/message_page.dart';
-import 'calendar.dart'; // Import the calendar page
-
-class Contact {
-  String name;
-  String code;
-
-  Contact({required this.name, required this.code});
-}
+import 'package:bookme/crud.dart'; // Ensure this import points to your CRUD class
+import 'settings_page.dart'; // Adjust path as needed
+import 'calendar.dart'; // Adjust path as needed
+import '../Message_Pages/message_page.dart'; // Adjust path as needed
 
 class ContactPage extends StatefulWidget {
   const ContactPage({Key? key}) : super(key: key);
@@ -21,12 +12,21 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-  List<Contact> contacts = [
-    Contact(name: 'John Doe', code: '123456'),
-    Contact(name: 'Jane Smith', code: '234567'),
-    Contact(name: 'Bob Johnson', code: '345678'),
-    Contact(name: 'Alice Williams', code: '456789'),
-  ];
+  final CRUD _crud = CRUD();
+  List<Map<String, dynamic>> contacts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadContacts();
+  }
+
+  void _loadContacts() async {
+    var fetchedContacts = await _crud.fetchAllContacts();
+    setState(() {
+      contacts = fetchedContacts;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,22 +37,18 @@ class _ContactPageState extends State<ContactPage> {
           IconButton(
             onPressed: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SettingsPage(),
-                ),
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SettingsPage()));
             },
             icon: const Icon(Icons.settings),
           ),
           IconButton(
             onPressed: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CalendarPage(),
-                ),
-              );
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CalendarPage()));
             },
             icon: const Icon(Icons.calendar_today),
           ),
@@ -69,24 +65,30 @@ class _ContactPageState extends State<ContactPage> {
                 itemCount: contacts.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Center(
-                      child: Column(
-                        children: [
-                          Text(contacts[index].name),
-                          Text('Code: ${contacts[index].code}'),
-                        ],
-                      ),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        _showDeleteConfirmationDialog(context, index);
-                      },
-                    ),
-                    onTap: () {
-                      _navigateToMessagePage(index);
-                    },
-                  );
+                      title: Center(child: Text(contacts[index]['name'])),
+                      // Use Firebase UIDs directly from user document references where possible
+                      onTap: () async {
+                        try {
+                          // Use CRUD method to get user UID
+                          String userToAddUID = await _crud
+                              .getUserUIDByUserID(contacts[index]['user_ID']);
+                          String currentUserUID =
+                              _crud.currentUserUid; // Current user's UID
+
+                          // Get or create chat room
+                          String chatRoomId = await _crud.getOrCreateChatRoom(
+                              currentUserUID, userToAddUID);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MessagePage(
+                                      chatRoomId: chatRoomId,
+                                      contactName: contacts[index]['name'])));
+                        } catch (e) {
+                          // Handle exceptions, e.g., user not found
+                          print(e);
+                        }
+                      });
                 },
               ),
             ),
@@ -94,48 +96,32 @@ class _ContactPageState extends State<ContactPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showNewContactDialog(context);
-        },
+        onPressed: () => _showNewContactDialog(context),
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  // Function to show a dialog for adding a new contact
-  // Need to add this directly to the database somehow, then refresh page
   Future<void> _showNewContactDialog(BuildContext context) async {
-    String? newContactName = await showDialog(
+    TextEditingController newContactController = TextEditingController();
+
+    String? newContactID = await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
-        TextEditingController newContactController = TextEditingController();
-
         return AlertDialog(
           title: const Text('Add New Contact'),
-          content: Column(
-            children: [
-              TextField(
-                controller: newContactController,
-                decoration: const InputDecoration(labelText: 'Contact Name'),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'A 6-digit code will be generated for the new contact.',
-                style: TextStyle(color: Color.fromRGBO(158, 158, 158, 1)),
-              ),
-            ],
+          content: TextField(
+            controller: newContactController,
+            decoration: const InputDecoration(labelText: 'Enter User ID'),
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.pop(context, newContactController.text);
-              },
+              onPressed: () =>
+                  Navigator.pop(context, newContactController.text),
               child: const Text('Add'),
             ),
           ],
@@ -143,74 +129,10 @@ class _ContactPageState extends State<ContactPage> {
       },
     );
 
-    // Add the new contact to the list if not null (user didn't cancel)
-    if (newContactName != null && newContactName.isNotEmpty) {
-      String newContactCode = _generateRandomCode();
-      Contact newContact = Contact(name: newContactName, code: newContactCode);
-
-      setState(() {
-        contacts.add(newContact);
-      });
+    if (newContactID != null && newContactID.isNotEmpty) {
+      await _crud.addContact(newContactID);
+      // Reload the contacts list
+      _loadContacts(); // Refresh the contact list
     }
-  }
-
-  // Function to generate a random 6-digit code
-  String _generateRandomCode() {
-    // Implement your logic to generate a random 6-digit code here
-    // For example, you can use a random number generator or any specific algorithm
-    // Make sure the generated code is unique if needed
-    // For simplicity, let's use a constant value for now
-    return '987654';
-  }
-
-  // Function to navigate to the MessagePage with the selected contact
-  void _navigateToMessagePage(int index) {
-    Contact selectedContact = contacts[index];
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MessagePage(
-          buttonNumber: index + 1,
-          contactName: selectedContact.name,
-        ),
-      ),
-    );
-  }
-
-  Future<void> _showDeleteConfirmationDialog(
-      BuildContext context, int index) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Delete Contact'),
-          content:
-              Text('Are you sure you want to delete ${contacts[index].name}?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                _deleteContact(index);
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // Function to delete a contact from the list
-  void _deleteContact(int index) {
-    setState(() {
-      contacts.removeAt(index);
-    });
   }
 }

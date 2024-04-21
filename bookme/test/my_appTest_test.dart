@@ -1,4 +1,4 @@
-import 'package:bookme/my_app.dart';
+import 'package:bookme/main.dart';
 import 'package:bookme/Login_Pages/sign_in_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 // Assuming your project structure is such

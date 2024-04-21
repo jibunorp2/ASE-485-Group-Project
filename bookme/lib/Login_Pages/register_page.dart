@@ -1,6 +1,5 @@
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:flutter/material.dart';
+import 'package:bookme/crud.dart';
+import 'package:flutter/material.dart'; // Import your CRUD class
 import 'login_page.dart'; // Import your login page
 
 class RegisterPage extends StatefulWidget {
@@ -106,21 +105,32 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 32),
                 //Register Button
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (validateName(_nameController.text) &&
                         validateEmail(_emailController.text) &&
                         validatePass(_passwordController.text)) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
+                      bool success = await CRUD().registerUser(
+                        _nameController.text,
+                        _emailController.text,
+                        _passwordController.text,
                       );
+                      if (success) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      } else {
+                        // Handle signup failure, maybe display an error message
+                      }
+                    } else {
+                      // Handle validation errors, maybe display an error message
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal, // Set background color
-                    foregroundColor: Colors.white, // Set text color to black
+                    backgroundColor: Colors.teal,
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 40, vertical: 20),
                   ),
