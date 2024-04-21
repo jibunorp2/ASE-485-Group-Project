@@ -74,13 +74,47 @@ class CRUD {
     return [];
   }
 
-  // Function to add a contact
-  Future<void> addContact(String userID) async {
+  // Function to add a contact and update both users' contact lists
+  Future<void> addContact(String userIDToAdd) async {
     User? currentUser = _auth.currentUser;
     if (currentUser != null) {
-      await _firestore.collection('contact_lists').doc(currentUser.uid).update({
-        'users_in_list': FieldValue.arrayUnion([userID]),
-      });
+      // Fetch the current user's 6-digit ID
+      var currentUserDoc =
+          await _firestore.collection('users').doc(currentUser.uid).get();
+      String? currentUser6DigitID = currentUserDoc.data()?['user_ID'];
+
+      if (currentUser6DigitID != null) {
+        // Update the current user's contact list
+        await _firestore
+            .collection('contact_lists')
+            .doc(currentUser.uid)
+            .update({
+          'users_in_list': FieldValue.arrayUnion([userIDToAdd]),
+        });
+
+        // Fetch the Firestore user document for the user to add
+        var userToAddDoc = await _firestore
+            .collection('users')
+            .where('user_ID', isEqualTo: userIDToAdd)
+            .get();
+        if (userToAddDoc.docs.isNotEmpty) {
+          String userToAddUID = userToAddDoc.docs.first.id;
+
+          // Update the other user's contact list to include the current user's ID
+          await _firestore
+              .collection('contact_lists')
+              .doc(userToAddUID)
+              .update({
+            'users_in_list': FieldValue.arrayUnion([currentUser6DigitID]),
+          });
+        } else {
+          print("User not found");
+        }
+      } else {
+        print("Current user 6-digit ID not found");
+      }
+    } else {
+      print("No current user logged in");
     }
   }
 
