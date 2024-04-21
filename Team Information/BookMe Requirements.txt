@@ -1,0 +1,155 @@
+Requirements:
+Version 1
+1.Landing Page with Login or Register
+2.Login Page
+3.Register Page
+4.User Account
+5.Contact Page after Login
+6.Navigation Bar
+7.Settings Button
+8.List of Contacts
+9.Add Contact
+10.Remove Contacts
+11.Access Individual Messaging Page
+12.Message History
+12.1.Send and Receive Messages
+13.Send Custom Appointment Objects
+
+Version 2
+(1)1. Appointment
+  (1)1.1. Appointment Acception / Rejection
+  (2)1.2. Appointment Cross Checking Appointments
+2. Backend CRUD
+  (3)2.1 Feature Add
+  (4)2.2 Feature Delete
+  (5)2.3 Feature Update
+  (6)2.4 Feature Read
+3. Backend Implementation
+  (7)3.1 Implement Function Calling for frontend
+  (8)3.2 Registered Users Added to Database
+  (9)3.3 Contacts Added to Database
+  (10)3.4 Contacts Add to Contacts List
+4.(11)Sign In Verification
+5. Calendar Creation
+  (12)5.1 Create Calendar Skeleton
+  (13)5.2 Implement Backend into Calendar
+
+Version 3
+1. Calendar Creation
+  1.1 Finish Frontend Creation of Calendar
+2. Sign in Verfication
+3. Complete Backend Implementation
+
+EPICS & USER STORIES:
+
+Version 1
+Epic: Account Creation
+
+User Story 1: Landing Page with Login or Register
+As a new user, I want to visit a landing page where I can choose to either log in with existing credentials or register for a new account, so that I can access the platform easily.
+
+User Story 2: Login Page
+As a registered user, I want to have a dedicated login page where I can securely enter my credentials to access my account.
+
+User Story 3: Register Page
+As a new user, I want to be directed to a registration page where I can input my details to create a new account on the platform.
+
+User Story 4: User Account
+As a user, I want to have a personalized user account upon registration, which allows me to manage my profile and access platform features.
+
+Epic: Contacts
+
+User Story 1: Contact Page after Login
+As a logged-in user, I want to be directed to a contact page upon login, where I can view and manage my contacts.
+
+User Story 2: Navigation Bar
+As a user navigating through the platform, I expect to see a navigation bar for easy access to different sections, including contacts.
+
+User Story 3: Settings Button
+As a user, I want a settings button within the contacts section that allows me to customize my contact preferences and other relevant settings.
+
+User Story 4: List of Contacts
+As a user, I want a clear and organized list of my contacts, displayed in a convenient format for easy access and management.
+
+User Story 5: Add Contact
+As a user, I want the ability to add new contacts to my list, either manually or through importing contacts from other sources.
+
+User Story 6: Remove Contacts
+As a user, I want the option to remove contacts from my list, ensuring that my contacts remain relevant and up-to-date.
+
+Epic: Messaging Page
+
+User Story 1: Access Individual Messaging Page
+As a user, when I click on a contact from my list, I expect to be directed to my own individual messaging page with that person, facilitating one-on-one communication.
+
+User Story 2: Message History
+As a user, I want to view the message history within the messaging page, allowing me to recall past conversations with ease.
+
+User Story 3: Send and Receive Messages
+As a user, I want the ability to send and receive messages seamlessly within the messaging page, ensuring efficient communication with my contacts.
+
+User Story 4: Send Custom Appointment Objects
+As a user, I want to have the option to send custom appointment objects within messages, facilitating scheduling and coordination with my contacts.
+
+Epic: Account Creation
+Story - Landing Page with Login or Register
+Story - Login Page
+Story - Register Page
+Story - User account, buisness account, admin account. Can focus on just user rn.
+
+Epic: Contacts
+Story - Contact Page after login
+Story - Some sort of nav bar?
+Story - Settings button
+Story - List of contacts
+Story - Add contact
+Story - Remove contacts
+
+Epic: Messaging Page
+Story - You click on the contact, which takes you to your own
+individual messaging page with that person.
+Story - Message history, you can see the past messages
+Story - You can send and receive messages
+Story - You can send custom appointment objects
+
+Version 2
+Epic: Appointment Management
+
+1. Appointment Creation
+1.1 User Story - Appointment Acceptance/Rejection: As a user, I want to be able to choose to accept or reject new appointments to proposed to my schedule. So that I can accept the appointments I want in my schedule and reject those that I don't want.
+
+1.2 User Story - Appointment Cross Checking: As a user, I want the ability to cross check my appointments on my calendar so that I can make sure that appointments don't overlap and that there are no schedule conflicts.
+
+Epic: Backend Development
+
+2. Backend CRUD
+2.1 User Story - Feature Add: As a developer, I need to implement functionality to add new features to the backend system, allowing for continuous enhancement and expansion of the application's capabilities.
+
+2.2 User Story - Feature Delete: As a developer, I need to create a mechanism for deleting unnecessary or deprecated features from the backend system, ensuring efficient maintenance and optimization of the application.
+
+2.3 User Story - Feature Update: As a developer, I need to establish a process for updating existing features in the backend system to improve functionality, fix bugs, or address user feedback, ensuring the application remains robust and reliable.
+
+2.4 User Story - Feature Read: As a developer, I need to implement functionality for reading and accessing features stored in the backend system, enabling seamless integration with the frontend and providing users with a smooth experience.
+
+Epic: Backend Implementation
+
+3. Backend Implementation
+3.1 User Story - Implement Function Calling for Frontend: As a backend developer, I need to establish a mechanism for frontend components to call backend functions seamlessly, enabling efficient communication and data exchange between the two layers of the application.
+
+3.2 User Story - Registered Users Added to Database: As a backend developer, I need to ensure that when users register for accounts, their information is securely stored in the database, allowing for authentication and personalized user experiences.
+
+3.3 User Story - Contacts Added to Database: As a backend developer, I need to implement functionality for adding contacts to the database when users interact with the application, facilitating communication and collaboration between users.
+
+3.4 User Story - Contacts Add to Contacts List: As a backend developer, I need to create a process for adding contacts to users' contact lists, ensuring that users can easily manage and communicate with their connections within the application.
+
+Epic: User Authentication
+
+4. Sign In Verification
+4.1 User Story - User Authentication: As a user, I want to undergo a verification process during sign-in to ensure that only authorized individuals can access the application, safeguarding the security of my account and personal information.
+
+Epic: Calendar Creation
+
+5. Calendar Creation
+5.1 User Story - Calendar: As a user, I would like a visual calendar so that I can see when my appointments are, and keep track of where and when I have things to do.
+
+5.2 User Story - Implement Backend Into Calendar: As a backend developer, I need to implement the calendar into the backend which aids the CRUD abilities of the application and ensures easy management of the rest of the application.
