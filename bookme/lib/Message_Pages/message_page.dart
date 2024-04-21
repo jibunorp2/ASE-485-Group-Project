@@ -1,3 +1,4 @@
+// MessagePage.dart
 import 'package:flutter/material.dart';
 import 'package:bookme/crud.dart'; // Ensure this import points to your actual CRUD class
 import 'appointment_page.dart'; // Make sure this import points to your actual AppointmentPage class
@@ -23,17 +24,60 @@ class _MessagePageState extends State<MessagePage> {
   final CRUD _crud = CRUD();
   bool showAppointmentButtons =
       false; // To control the visibility of appointment buttons
+  String? currentUserUID;
+  String? otherUserUID;
 
   @override
   void initState() {
     super.initState();
     _loadMessages();
+    _fetchUserUIDs();
   }
 
   void _loadMessages() async {
     var fetchedMessages = await _crud.getMessageList(widget.chatRoomId);
     setState(() {
       messages = fetchedMessages;
+    });
+  }
+
+  void _fetchUserUIDs() async {
+    currentUserUID = _crud.currentUserUid;
+    if (currentUserUID != null && widget.chatRoomId.isNotEmpty) {
+      try {
+        otherUserUID =
+            await _crud.getOtherUserUID(widget.chatRoomId, currentUserUID!);
+        // Optionally update the state or handle UI changes here if needed
+      } catch (e) {
+        print("Error fetching other user's UID: $e");
+        // Handle exceptions, perhaps by showing a UI error message
+      }
+    } else {
+      print("Current user UID is null or chat room ID is empty.");
+    }
+  }
+
+  void _approveAppointment() async {
+    if (currentUserUID == null || otherUserUID == null) {
+      print("User IDs not fetched yet.");
+      return;
+    }
+
+    Map<String, String> appointmentData = {
+      'title': 'Some Title',
+      'type': 'Consultation',
+      'date': '2023-10-01',
+      'time': '14:00',
+      'details': 'Some important details about the appointment'
+    };
+
+    await _crud
+        .addAppointmentToBothUsersLists(
+            currentUserUID!, otherUserUID!, appointmentData)
+        .then((_) {
+      print("Appointment added to both users' lists");
+    }).catchError((error) {
+      print("Failed to add appointment: $error");
     });
   }
 
@@ -73,6 +117,7 @@ class _MessagePageState extends State<MessagePage> {
                         showAppointmentButtons =
                             false; // Hide the buttons after action
                       });
+                      _approveAppointment();
                     },
                     child: const Text('Approve'),
                   ),

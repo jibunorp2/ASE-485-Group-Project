@@ -34,11 +34,43 @@ class CRUD {
         'users_in_list': [],
       });
 
+      // Create a new appointment list for the user
+      await _firestore.collection('appointment_lists').doc(user.uid).set({
+        'appointment_list_ID': user.uid,
+        'appointments': [],
+      });
+
       return true;
     } catch (e) {
       print("Error registering user: $e");
       return false;
     }
+  }
+
+  // Function to add an appointment to both users' lists
+  Future<void> addAppointmentToBothUsersLists(String user1UID, String user2UID,
+      Map<String, String> appointmentData) async {
+    String appointmentID =
+        _generateUserID(); // Generate a unique ID for the appointment.
+
+    // Use the data from the appointmentData map instead of hardcoded values.
+    Map<String, dynamic> appointment = {
+      'appointment_ID': appointmentID,
+      'title': appointmentData['title'],
+      'type': appointmentData['type'],
+      'date': appointmentData['date'],
+      'time': appointmentData['time'],
+      'details': appointmentData['details']
+    };
+
+    // Use set with merge true to update or create the document.
+    await _firestore.collection('appointment_lists').doc(user1UID).set({
+      'appointments': FieldValue.arrayUnion([appointment])
+    }, SetOptions(merge: true));
+
+    await _firestore.collection('appointment_lists').doc(user2UID).set({
+      'appointments': FieldValue.arrayUnion([appointment])
+    }, SetOptions(merge: true));
   }
 
   // Function to sign in a user
@@ -50,6 +82,22 @@ class CRUD {
       print("Error signing in: $e");
       return false;
     }
+  }
+
+  // Method to fetch the other user's UID from a chat room
+  Future<String> getOtherUserUID(
+      String chatRoomID, String currentUserUID) async {
+    // Fetch the chat room document from Firestore
+    var chatRoomDoc =
+        await _firestore.collection('chat_rooms').doc(chatRoomID).get();
+    var participants = chatRoomDoc.data()?['participants'] as List<dynamic>;
+    // Assuming participants always contain exactly two UIDs
+    String otherUserUID = participants
+        .firstWhere((uid) => uid != currentUserUID, orElse: () => '');
+    if (otherUserUID.isEmpty) {
+      throw Exception('No other user found in this chat room');
+    }
+    return otherUserUID;
   }
 
   // Function to fetch contact details

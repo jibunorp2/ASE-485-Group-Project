@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bookme/crud.dart';
 
 class AppointmentPage extends StatefulWidget {
   final Function(String) onSave;
@@ -125,5 +126,20 @@ class _AppointmentPageState extends State<AppointmentPage> {
         ),
       ),
     );
+  }
+
+  void onSave() {
+    // Collect data from the text controllers
+    String details = 'Title: ${titleController.text}, '
+        'Type: ${typeController.text}, '
+        'Date: ${dateController.text}, '
+        'Time: ${timeController.text}, '
+        'Details: ${detailController.text}';
+
+    // Use the onSave callback passed from the parent widget to pass the data
+    widget.onSave(details);
+
+    // Optionally, navigate back or show a success message
+    Navigator.pop(context);
   }
 }
