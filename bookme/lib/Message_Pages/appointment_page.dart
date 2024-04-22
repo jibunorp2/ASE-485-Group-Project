@@ -32,9 +32,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              child: ListView(
                 children: [
                   TextField(
                     controller: titleController,
@@ -50,20 +48,14 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         typeController.text = newValue ?? '';
                       });
                     },
-                    items: <String>[
-                      'Meeting',
-                      'Consultation',
-                      'Follow-up'
-                    ] // Replace with your unique types
+                    items: <String>['Meeting', 'Consultation', 'Follow-up']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
                       );
                     }).toList(),
-                    decoration: InputDecoration(
-                      labelText: 'Type',
-                    ),
+                    decoration: InputDecoration(labelText: 'Type'),
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
@@ -108,7 +100,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     controller: detailController,
                     decoration: const InputDecoration(labelText: 'Details'),
                   ),
-                  const Spacer(),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       String details =

@@ -37,106 +37,109 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width *
-                      0.8, // Adjust the width as needed
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.black), // Add border to TextField
-                    borderRadius: BorderRadius.circular(
-                        8.0), // Optional: Add border radius
-                  ),
-                  child: TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Name',
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 16.0,
-                          horizontal: 16.0), // Adjust the padding as needed
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.8, // Adjust the width as needed
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Colors.black), // Add border to TextField
+                      borderRadius: BorderRadius.circular(
+                          8.0), // Optional: Add border radius
+                    ),
+                    child: TextField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Name',
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 16.0,
+                            horizontal: 16.0), // Adjust the padding as needed
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  width: MediaQuery.of(context).size.width *
-                      0.8, // Adjust the width as needed
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.black), // Add border to TextField
-                    borderRadius: BorderRadius.circular(
-                        8.0), // Optional: Add border radius
-                  ),
-                  child: TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 16.0,
-                          horizontal: 16.0), // Adjust the padding as needed
+                  const SizedBox(height: 16),
+                  Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.8, // Adjust the width as needed
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Colors.black), // Add border to TextField
+                      borderRadius: BorderRadius.circular(
+                          8.0), // Optional: Add border radius
                     ),
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  width: MediaQuery.of(context).size.width *
-                      0.8, // Adjust the width as needed
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.black), // Add border to TextField
-                    borderRadius: BorderRadius.circular(
-                        8.0), // Optional: Add border radius
-                  ),
-                  child: TextField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 16.0,
-                          horizontal: 16.0), // Adjust the padding as needed
+                    child: TextField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 16.0,
+                            horizontal: 16.0), // Adjust the padding as needed
+                      ),
+                      keyboardType: TextInputType.emailAddress,
                     ),
-                    obscureText: true,
                   ),
-                ),
-                const SizedBox(height: 32),
-                //Register Button
-                ElevatedButton(
-                  onPressed: () async {
-                    if (validateName(_nameController.text) &&
-                        validateEmail(_emailController.text) &&
-                        validatePass(_passwordController.text)) {
-                      bool success = await CRUD().registerUser(
-                        _nameController.text,
-                        _emailController.text,
-                        _passwordController.text,
-                      );
-                      if (success) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
-                          ),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.8, // Adjust the width as needed
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Colors.black), // Add border to TextField
+                      borderRadius: BorderRadius.circular(
+                          8.0), // Optional: Add border radius
+                    ),
+                    child: TextField(
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                        labelText: 'Password',
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 16.0,
+                            horizontal: 16.0), // Adjust the padding as needed
+                      ),
+                      obscureText: true,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  //Register Button
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (validateName(_nameController.text) &&
+                          validateEmail(_emailController.text) &&
+                          validatePass(_passwordController.text)) {
+                        bool success = await CRUD().registerUser(
+                          _nameController.text,
+                          _emailController.text,
+                          _passwordController.text,
                         );
+                        if (success) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LoginPage(),
+                            ),
+                          );
+                        } else {
+                          // Handle signup failure, maybe display an error message
+                        }
                       } else {
-                        // Handle signup failure, maybe display an error message
+                        // Handle validation errors, maybe display an error message
                       }
-                    } else {
-                      // Handle validation errors, maybe display an error message
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 20),
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.teal,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 20),
+                    ),
+                    child:
+                        const Text('Register', style: TextStyle(fontSize: 20)),
                   ),
-                  child: const Text('Register', style: TextStyle(fontSize: 20)),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
